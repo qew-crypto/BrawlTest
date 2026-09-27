@@ -1,6 +1,23 @@
 from os import urandom
 from hashlib import blake2b
-from _tweetnacl import (crypto_box_beforenm, crypto_scalarmult_base, crypto_box_NONCEBYTES, crypto_secretbox, crypto_secretbox_open)
+try:
+    from _tweetnacl import (
+        crypto_box_beforenm,
+        crypto_scalarmult_base,
+        crypto_box_NONCEBYTES,
+        crypto_secretbox,
+        crypto_secretbox_open,
+    )
+except ImportError:
+    # PyNaCl provides compatible bindings and installs from a prebuilt wheel,
+    # so hosting platforms do not need gcc at runtime.
+    from nacl.bindings import (
+        crypto_box_beforenm,
+        crypto_scalarmult_base,
+        crypto_box_NONCEBYTES,
+        crypto_secretbox,
+        crypto_secretbox_open,
+    )
 
 class Nonce:
     def __init__(self, nonce=None, clientKey=None, serverKey=None):

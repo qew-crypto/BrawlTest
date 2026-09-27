@@ -58,10 +58,17 @@ def prepare_crypto() -> None:
     sys.path.insert(0, str(crypto_dir))
     try:
         __import__("_tweetnacl")
-        print("Crypto OK")
+        print("Crypto OK (_tweetnacl)")
         return
     except ImportError:
-        print("Building _tweetnacl...")
+        pass
+
+    try:
+        __import__("nacl.bindings")
+        print("Crypto OK (PyNaCl)")
+        return
+    except ImportError:
+        print("PyNaCl not found; building _tweetnacl...")
 
     subprocess.run(
         [sys.executable, "setup.py", "build_ext", "--inplace"],
