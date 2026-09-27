@@ -1,4 +1,7 @@
 using BSL.v59.Core;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 
 namespace BSL.v59;
 
@@ -6,25 +9,62 @@ public static class Program
 {
     public static async Task Main(string[] args)
     {
-        var port = 9339;
-        var portValue = Environment.GetEnvironmentVariable("PORT");
-        if (!string.IsNullOrWhiteSpace(portValue) &&
-            int.TryParse(portValue, out var parsedPort) &&
-            parsedPort is >= 1000 and <= 65535)
-        {
-            port = parsedPort;
-        }
+        var gamePort = ReadPort("GAME_PORT", 9339);
+        var healthPort = ReadPort("PORT", 3000);
 
-        var gateway = new LaserTcpCentralGateway((ushort)port);
+        var gateway = new LaserTcpCentralGateway((ushort)gamePort);
         if (!gateway.Start())
-            throw new InvalidOperationException($"Could not listen on 0.0.0.0:{port}");
+            throw new InvalidOperationException($"Could not listen on 0.0.0.0:{gamePort}");
 
-        var publicHost = Environment.GetEnvironmentVariable("PUBLIC_HOST") ?? "MeshBrawl.bothost.tech";
-        var message = $"✅ BSL v59 запущен на BotHost\nАдрес: {publicHost}\nПорт: {port}/TCP\n\nredirectHost = {publicHost}\nredirectPort = {port}";
+        _ = RunHealthServerAsync(healthPort);
+
+        var message =
+            $"✅ BSL v59 запущен на BotHost\n" +
+            $"Локальный игровой порт: {gamePort}/TCP\n" +
+            $"Проверка состояния: {healthPort}/HTTP\n\n" +
+            "Для клиента используйте публичный адрес и порт TCP-туннеля.";
         Console.WriteLine(message);
         await SendTelegramAsync(message);
 
         await Task.Delay(Timeout.Infinite);
+    }
+
+    private static int ReadPort(string variable, int fallback)
+    {
+        var value = Environment.GetEnvironmentVariable(variable);
+        return !string.IsNullOrWhiteSpace(value) &&
+               int.TryParse(value, out var port) &&
+               port is >= 1000 and <= 65535
+            ? port
+            : fallback;
+    }
+
+    private static async Task RunHealthServerAsync(int port)
+    {
+        var listener = new TcpListener(IPAddress.Any, port);
+        listener.Start();
+        Console.WriteLine($"Health endpoint listening on 0.0.0.0:{port}");
+
+        while (true)
+        {
+            var client = await listener.AcceptTcpClientAsync();
+            _ = Task.Run(async () =>
+            {
+                using (client)
+                {
+                    var body = Encoding.UTF8.GetBytes("BSL v59 is running\n");
+                    var header = Encoding.ASCII.GetBytes(
+                        "HTTP/1.1 200 OK\r\n" +
+                        "Content-Type: text/plain; charset=utf-8\r\n" +
+                        $"Content-Length: {body.Length}\r\n" +
+                        "Connection: close\r\n\r\n");
+
+                    var stream = client.GetStream();
+                    await stream.WriteAsync(header);
+                    await stream.WriteAsync(body);
+                }
+            });
+        }
     }
 
     private static async Task SendTelegramAsync(string message)
