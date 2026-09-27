@@ -6,7 +6,7 @@ BSL v59 private-server test deployment for BotHost.
 
 - Enable **Use custom Dockerfile**.
 - Leave the startup command empty so BotHost uses the Dockerfile `ENTRYPOINT`.
-- Set port to `9339`.
+- Set the internal web-application port to `3000`; it must match `PORT`.
 - Set `PUBLIC_HOST=MeshBrawl.bothost.tech`.
 - Optional Telegram variables: `BOT_TOKEN` and `TELEGRAM_CHAT_ID`.
 
@@ -23,7 +23,7 @@ The compatible client must be BSL v59 for `arm64-v8a`. Configure:
 
 ```text
 redirectHost = MeshBrawl.bothost.tech
-redirectPort = 9339
+redirectPort = 3000
 ```
 
 The v52 client is not compatible with this server.
