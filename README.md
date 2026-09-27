@@ -1,25 +1,23 @@
-# BSL-V52
-Python Brawl Stars server emulator for version 52
+# MeshBrawl — BSL v59
 
-## How to play: ##
+BSL v59 private-server test deployment for BotHost.
 
-### Server ###
-I use a zip server from BSDS that I modified which was made by [Сrazor](https://github.com/CrazorTheCat) and [risporse](https://github.com/risporce)
+## BotHost
 
-1: Download the server and extract it: https://github.com/LkPrtctrd/BSL-V52/archive/refs/heads/master.zip
+- Enable **Use custom Dockerfile**.
+- Set port to `9339`.
+- Set `PUBLIC_HOST=MeshBrawl.bothost.tech`.
+- Optional Telegram variables: `BOT_TOKEN` and `TELEGRAM_CHAT_ID`.
 
-2: Open terminal on your computer and go to server directory.
+The active server source is in `v59/`. Older v52 files are retained only as an archive and are not copied into the Docker image.
 
-3: Install TweetnaclCrypto if you don't have it (go to server directory -> Heart -> Crypto and type python setup.py install --user)
+## Android client
 
-4: Type python3 Main.py and it's done, follow client instructions.
+The compatible client must be BSL v59 for `arm64-v8a`. Configure:
 
-### Android Client ###
-1: Download the APK here: https://www.mediafire.com/file/l62zhew4x70rk7g/com.bsl.v52-fix.apk/file
+```text
+redirectHost = MeshBrawl.bothost.tech
+redirectPort = 9339
+```
 
-2: Change redirectHost (and redirectPort if you need it) in the frida config (lib/armeabi-v7a/libBSL.config.so)
-
-3: Enjoy playing BSL-V52!
-
-## Screenshots ##
-![BSL-V52](https://raw.githubusercontent.com/LkPrtctrd/BSL-V52/main/Screenshots/menu.png)
+The v52 client is not compatible with this server.
