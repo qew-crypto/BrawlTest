@@ -17,8 +17,15 @@ public class MessageManager(Messaging messaging)
 
     private int LogicMessageReceived(LoginMessage loginMessage)
     {
-        if (loginMessage.ClientMajorVersion is not 59) return -1488; 
-        messaging.Send(new LoginOkMessage());
+        Console.WriteLine(
+            $"Client version: {loginMessage.ClientMajorVersion}.{loginMessage.ClientMinor}.{loginMessage.ClientBuild}");
+
+        if (loginMessage.ClientMajorVersion is not 59) return -1488;
+
+        messaging.Send(new LoginOkMessage(
+            loginMessage.ClientMajorVersion,
+            loginMessage.ClientBuild,
+            loginMessage.ClientMinor));
         messaging.Send(new OwnHomeDataMessage());
         
         return 1;

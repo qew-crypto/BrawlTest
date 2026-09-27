@@ -2,6 +2,17 @@ namespace BSL.v59.Logic.Protocol.Laser.S;
 
 public class LoginOkMessage : PiranhaMessage
 {
+    private readonly int _serverMajorVersion;
+    private readonly int _serverBuild;
+    private readonly int _serverMinor;
+
+    public LoginOkMessage(int serverMajorVersion, int serverBuild, int serverMinor)
+    {
+        _serverMajorVersion = serverMajorVersion;
+        _serverBuild = serverBuild;
+        _serverMinor = serverMinor;
+    }
+
     public override void Encode()
     {
         base.Encode();
@@ -19,9 +30,10 @@ public class LoginOkMessage : PiranhaMessage
         ByteStream.WriteString("abcdefghijklmnopqrstuvwxyz");
         ByteStream.WriteString(String.Empty);
         ByteStream.WriteString(String.Empty);
-        ByteStream.WriteInt(59);
-        ByteStream.WriteInt(197);
-        ByteStream.WriteInt(1);
+        // The client treats a different server version as a mandatory update.
+        ByteStream.WriteInt(_serverMajorVersion);
+        ByteStream.WriteInt(_serverBuild);
+        ByteStream.WriteInt(_serverMinor);
         ByteStream.WriteString("dev");
         ByteStream.WriteInt(0);
         ByteStream.WriteInt(0);
