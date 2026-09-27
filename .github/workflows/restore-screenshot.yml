@@ -1,0 +1,27 @@
+name: Restore binary screenshot
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  restore-screenshot:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download original screenshot
+        run: |
+          mkdir -p Screenshots
+          curl -fL "https://raw.githubusercontent.com/LkPrtctrd/BSL-V52/main/Screenshots/menu.png" -o Screenshots/menu.png
+      - name: Commit screenshot if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Screenshots/menu.png
+          git diff --cached --quiet || git commit -m "Add original screenshot"
+          git push
