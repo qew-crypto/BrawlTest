@@ -15,22 +15,24 @@ server listens internally on raw TCP port `9339`.
 
 ## Public TCP tunnel
 
-The Docker image includes the official playit.gg agent. To expose the game
-server when the hosting platform only supports web applications:
+The image starts the free public `bore.pub` TCP tunnel by default, with no
+account or payment required. After deployment, find this line in the logs:
 
-1. Create a playit.gg agent and TCP tunnel.
-2. Point the tunnel's local address to `127.0.0.1:9339`.
-3. Add the agent secret to BotHost as `PLAYIT_SECRET`.
-4. Rebuild the deployment.
-5. Put the public hostname and port assigned by playit.gg in the APK.
+```text
+listening at bore.pub:<public port>
+```
 
-If `PLAYIT_SECRET` is missing, the game server and health endpoint still start,
-but the game port is not exposed through playit.
+The public port is assigned dynamically and can change after a restart. Set
+`BORE_PORT` to request a specific public port, but availability is best-effort
+on the shared public service. Set `TUNNEL_PROVIDER=none` to disable the tunnel.
+
+The image also supports playit.gg. Set `TUNNEL_PROVIDER=playit` and provide
+`PLAYIT_SECRET` to use it instead.
 
 ## Android client
 
 The compatible client must be BSL v59 for `arm64-v8a`. Configure it with the
-public address assigned by playit.gg:
+public address printed by the tunnel:
 
 ```text
 redirectHost = <public TCP tunnel host>
