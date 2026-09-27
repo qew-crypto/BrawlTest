@@ -19,6 +19,7 @@ COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod 0755 /usr/local/bin/docker-entrypoint.sh
 ENV PORT=3000
 ENV GAME_PORT=9339
+ENV BORE_PORT=9339
 EXPOSE 3000
 # BotHost mounts the repository over /app at runtime, so keep the published
 # application under /opt where the deployment mount cannot hide it.
