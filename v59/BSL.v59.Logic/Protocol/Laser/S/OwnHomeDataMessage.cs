@@ -4,25 +4,6 @@ namespace BSL.v59.Logic.Protocol.Laser.S;
 
 public class OwnHomeDataMessage : PiranhaMessage
 {
-    private static readonly int[] BrawlerIds =
-    [
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-        18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35,
-        36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52,
-        53, 54, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70,
-        71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87
-    ];
-
-    private static readonly int[] UnlockCardIds =
-    [
-        0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64,
-        68, 72, 95, 100, 105, 110, 115, 120, 125, 130, 177, 182, 188, 194,
-        200, 206, 218, 224, 230, 236, 279, 296, 303, 320, 327, 334, 341, 358,
-        365, 372, 379, 386, 393, 410, 417, 427, 434, 448, 466, 474, 491, 499,
-        507, 515, 523, 531, 539, 547, 557, 565, 573, 581, 589, 597, 605, 619,
-        633, 642, 655, 663, 671, 730, 748, 760, 768, 800, 811, 828, 844
-    ];
-
     public override void Encode()
     {
         base.Encode();
@@ -35,11 +16,11 @@ public class OwnHomeDataMessage : PiranhaMessage
         ByteStream.WriteVInt(0);
         ByteStream.WriteVInt(0);
         
-        ByteStream.WriteVInt(0);
-        ByteStream.WriteVInt(0);
-        ByteStream.WriteVInt(0);
-        ByteStream.WriteVInt(0);
-        ByteStream.WriteVInt(0);
+        ByteStream.WriteVInt(70000);
+        ByteStream.WriteVInt(70000);
+        ByteStream.WriteVInt(70000);
+        ByteStream.WriteVInt(454);
+        ByteStream.WriteVInt(1488);
         ByteStreamHelper.WriteDataReference(ByteStream, 28, 677);
         ByteStreamHelper.WriteDataReference(ByteStream, 43, 0);
         
@@ -58,7 +39,7 @@ public class OwnHomeDataMessage : PiranhaMessage
         ByteStream.WriteVInt(0);
         
         ByteStream.WriteVInt(0);
-        ByteStream.WriteVInt(0);
+        ByteStream.WriteVInt(70000);
         ByteStream.WriteVInt(0);
         ByteStream.WriteVInt(1);
         ByteStream.WriteBoolean(true);
@@ -89,7 +70,7 @@ public class OwnHomeDataMessage : PiranhaMessage
         
         ByteStream.WriteByte(1);
         {
-            ByteStreamHelper.WriteDataReference(ByteStream, 16, 0);
+            ByteStreamHelper.WriteDataReference(ByteStream, 16, 89);
         }
 
         ByteStream.WriteString("RU");
@@ -364,47 +345,47 @@ public class OwnHomeDataMessage : PiranhaMessage
         ByteStreamHelper.EncodeLogicLong(ByteStream, 1);
         ByteStreamHelper.EncodeLogicLong(ByteStream, 0);
 
-        ByteStream.WriteStringReference("MeshBrawl");
+        ByteStream.WriteStringReference("LkPrtctrd");
         ByteStream.WriteBoolean(true);
         ByteStream.WriteInt(-1);
         
         ByteStream.WriteVInt(23);
         {
-            ByteStream.WriteVInt(UnlockCardIds.Length + 2);
-            foreach (var cardId in UnlockCardIds)
+            ByteStream.WriteVInt(1);
             {
-                ByteStreamHelper.WriteDataReference(ByteStream, 23, cardId);
+                ByteStreamHelper.WriteDataReference(ByteStream, 23, 0);
                 ByteStream.WriteVInt(-1);
                 ByteStream.WriteVInt(1);
             }
-
-            // Coins and bling.
-            ByteStreamHelper.WriteDataReference(ByteStream, 5, 8);
-            ByteStream.WriteVInt(-1);
-            ByteStream.WriteVInt(100000);
-            ByteStreamHelper.WriteDataReference(ByteStream, 5, 23);
-            ByteStream.WriteVInt(-1);
-            ByteStream.WriteVInt(10000);
-
-            WriteBrawlerValues(0); // Trophies
-            WriteBrawlerValues(0); // Highest trophies
-
+            
             ByteStream.WriteVInt(0);
             ByteStream.WriteVInt(0);
-
-            WriteBrawlerValues(10); // Power level 11
-
             ByteStream.WriteVInt(0);
-            WriteBrawlerValues(2); // Seen/unlocked state
-
-            for (var i = 0; i < 15; i++)
-                ByteStream.WriteVInt(0);
+            ByteStream.WriteVInt(0);
+            ByteStream.WriteVInt(0);
+            ByteStream.WriteVInt(0);
+            ByteStream.WriteVInt(0);
+            ByteStream.WriteVInt(0);
+            ByteStream.WriteVInt(0);
+            ByteStream.WriteVInt(0);
+            ByteStream.WriteVInt(0);
+            ByteStream.WriteVInt(0);
+            ByteStream.WriteVInt(0);
+            ByteStream.WriteVInt(0);
+            ByteStream.WriteVInt(0);
+            ByteStream.WriteVInt(0);
+            ByteStream.WriteVInt(0);
+            ByteStream.WriteVInt(0);
+            ByteStream.WriteVInt(0);
+            ByteStream.WriteVInt(0);
+            ByteStream.WriteVInt(0);
+            ByteStream.WriteVInt(0);
         }
         
-        ByteStream.WriteVInt(1000);
-        ByteStream.WriteVInt(1000);
-        ByteStream.WriteVInt(1);
+        ByteStream.WriteVInt(1337);
+        ByteStream.WriteVInt(1337);
         ByteStream.WriteVInt(0);
+        ByteStream.WriteVInt(100);
         ByteStream.WriteVInt(0);
         ByteStream.WriteVInt(0);
         ByteStream.WriteVInt(0);
@@ -420,17 +401,6 @@ public class OwnHomeDataMessage : PiranhaMessage
         ByteStream.WriteVInt(0);
         ByteStream.WriteVInt(0);
         ByteStream.WriteVInt(2);
-    }
-
-    private void WriteBrawlerValues(int value)
-    {
-        ByteStream.WriteVInt(BrawlerIds.Length);
-        foreach (var brawlerId in BrawlerIds)
-        {
-            ByteStreamHelper.WriteDataReference(ByteStream, 16, brawlerId);
-            ByteStream.WriteVInt(-1);
-            ByteStream.WriteVInt(value);
-        }
     }
 
     public override int GetMessageType()
